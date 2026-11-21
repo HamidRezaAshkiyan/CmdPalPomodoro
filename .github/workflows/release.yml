@@ -13,7 +13,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [x64, ARM64]
+        include:
+          - arch: x64
+            rid: win-x64
+          - arch: ARM64
+            rid: win-arm64
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,11 +28,23 @@ jobs:
 
       - name: Build signed MSIX
         run: >
-          dotnet build CmdPalPomodoro.sln
+          dotnet publish CmdPalPomodoro.sln
           -c Release
+          -r ${{ matrix.rid }}
           -p:Platform=${{ matrix.arch }}
+          -p:SelfContained=true
           -p:GenerateAppxPackageOnBuild=true
           -p:AppxPackageDir=${{ github.workspace }}\AppPackages\${{ matrix.arch }}\
+
+      - name: Sign MSIX
+        shell: pwsh
+        run: |
+          $signtool = Get-ChildItem "$env:USERPROFILE\.nuget\packages\microsoft.windows.sdk.buildtools" -Recurse -Filter signtool.exe |
+            Where-Object { $_.FullName -match '\\x64\\signtool.exe$' } |
+            Select-Object -First 1
+          Get-ChildItem AppPackages -Recurse -Filter *.msix | ForEach-Object {
+            & $signtool.FullName sign /fd SHA256 /f build\CmdPalPomodoro.pfx /p CmdPalPomodoro $_.FullName
+          }
 
       - uses: actions/upload-artifact@v4
         with:

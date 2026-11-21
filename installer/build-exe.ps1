@@ -7,10 +7,11 @@ param(
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 $project = Join-Path $root "CmdPalPomodoro\CmdPalPomodoro.csproj"
-$inno = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-if (-not (Test-Path $inno)) {
-    $inno = "${env:ProgramFiles}\Inno Setup 6\ISCC.exe"
-}
+$inno = @(
+    "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+    "${env:ProgramFiles}\Inno Setup 6\ISCC.exe",
+    "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe"
+) | Where-Object { Test-Path $_ } | Select-Object -First 1
 
 foreach ($arch in $Platforms) {
     $publish = Join-Path $root "publish"
