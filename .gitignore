@@ -1,0 +1,14 @@
+.nuget/
+local-nupkgs/*
+!local-nupkgs/.gitkeep
+bin/
+obj/
+publish/
+dist/
+AppPackages/
+*.user
+.vs/
+*.msix
+*.msixbundle
+setup-x64.iss
+setup-arm64.iss
