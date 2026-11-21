@@ -14,8 +14,8 @@ Partner Center access is required to reserve the name and submit the package. Th
 6. Build both architectures:
 
 ```powershell
-dotnet build CmdPalPomodoro.sln -c Release -p:Platform=x64 -p:GenerateAppxPackageOnBuild=true -p:AppxPackageDir=AppPackages\x64\
-dotnet build CmdPalPomodoro.sln -c Release -p:Platform=ARM64 -p:GenerateAppxPackageOnBuild=true -p:AppxPackageDir=AppPackages\ARM64\
+dotnet publish CmdPalPomodoro.sln -c Release -r win-x64 -p:Platform=x64 -p:SelfContained=true -p:GenerateAppxPackageOnBuild=true -p:AppxPackageDir=AppPackages\x64\
+dotnet publish CmdPalPomodoro.sln -c Release -r win-arm64 -p:Platform=ARM64 -p:SelfContained=true -p:GenerateAppxPackageOnBuild=true -p:AppxPackageDir=AppPackages\ARM64\
 ```
 
 7. Bundle them with `makeappx bundle` and upload the `.msixbundle`.

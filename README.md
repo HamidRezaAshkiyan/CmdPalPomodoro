@@ -49,7 +49,7 @@ dotnet build CmdPalPomodoro.sln -c Debug -p:Platform=x64 -p:EnableMsixTooling=fa
 dotnet build CmdPalPomodoro.sln -c Release -p:Platform=x64 -p:GenerateAppxPackageOnBuild=true
 ```
 
-The MSIX build needs the Windows 10 SDK (10.0.26100), which GitHub Actions runners already have. Unpackaged F5 does not register the extension. In Visual Studio, use **Build → Deploy** after the SDK is installed.
+MSIX packaging uses the `Microsoft.Windows.SDK.BuildTools` package, so a separate Windows SDK install is not required. Unpackaged F5 does not register the extension. In Visual Studio, use **Build → Deploy**.
 
 ## Publish
 
